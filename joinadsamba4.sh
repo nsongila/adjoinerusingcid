@@ -33,7 +33,7 @@ function debianbase()
 		sudo sed -i "s/hostn/$newhost/g" /etc/hostname
 
 		#display new hostname
-		echo "Your new hostname is newhost"
+		echo "Your new hostname is $newhost"
 		# 192.168.1.253 is my AD IP, please replace it with your own information IP Address
 		echo "Now Changing your DNS to 192.168.1.253, AD IP address"
 		# add DNS name server to my AD
@@ -79,7 +79,7 @@ function ubuntu_mint_zor()
 		sudo sed -i "s/hostn/$newhost/g" /etc/hostname
 
 		#display new hostname
-		echo "Your new hostname is newhost"
+		echo "Your new hostname is $newhost"
 		# 192.168.1.253 is my AD IP, please replace it with your own information IP Address
 		echo "Now Changing your DNS to 192.168.1.253, AD IP address"
 		# add DNS name server to my AD
@@ -123,7 +123,7 @@ function fedora_rhel()
 		read newhost
 		echo "Please wait while we are changing your computer name to : $newhost"
 		nmcli general hostname $newhost
-		echo "Congratulations !!!!!!, your computer name is changed now to newhost"
+		echo "Congratulations !!!!!!, your computer name is changed now to $newhost"
 		echo "Your new hostname is newhost"
 		# CID (Closed In Directory)  Requirements below: 
 		# installing the requirements for joining the Domain
