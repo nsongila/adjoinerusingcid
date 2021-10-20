@@ -10,7 +10,7 @@
 # www.concepta-biz.net
 # Contact: +353872821070
 # Please run the script as root or sudo user
-# We How to Hide All The User Accounts in Login Screen because it is a shared computer for security reasons
+# It will hide all the User Accounts in Login Screen because it is a shared computer for security reasons
 # This script will run for Debian/Ubuntu and Redhat/Fedora
 function debianbase()
 	{
