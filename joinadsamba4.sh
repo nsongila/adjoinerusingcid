@@ -12,28 +12,37 @@
 # Please run the script as root or sudo user
 # It will hide all the User Accounts in Login Screen because it is a shared computer for security reasons
 # This script will run for Debian/Ubuntu and Redhat/Fedora
+# Please run as root/suo user
+
+function change_deb_hostname()
+	{
+	# This function will change Debian base distribution hostname
+	#Assign existing hostname to $hostn
+        hostn=$(cat /etc/hostname)
+
+        #Display existing hostname
+	echo "Existing hostname is $hostn"
+
+	#Ask for new hostname $newhost
+	echo "Enter new hostname: "
+	read newhost
+
+	#change hostname in /etc/hosts & /etc/hostname
+	sudo sed -i "s/$hostn/$newhost/g" /etc/hosts
+	sudo sed -i "s/$hostn/$newhost/g" /etc/hostname
+
+	#display new hostname
+	echo "Your new hostname is $newhost"
+	}
+	
+	
 function debianbase()
 	{
 	sudo apt update
 	sudo apt upgrade
 	sudo apt install resolvconf
 	# Changing the computer name
-		#Assign existing hostname to hostn
-		hostn=(cat /etc/hostname)
-
-		#Display existing hostname
-		echo "Existing hostname is hostn"
-
-		#Ask for new hostname newhost
-		echo "Enter new hostname: "
-		read newhost
-
-		#change hostname in /etc/hosts & /etc/hostname
-		sudo sed -i "s/hostn/$newhost/g" /etc/hosts
-		sudo sed -i "s/hostn/$newhost/g" /etc/hostname
-
-		#display new hostname
-		echo "Your new hostname is $newhost"
+		change_deb_hostname
 		# 192.168.1.253 is my AD IP, please replace it with your own information IP Address
 		echo "Now Changing your DNS to 192.168.1.253, AD IP address"
 		# add DNS name server to my AD
@@ -64,22 +73,7 @@ function ubuntu_mint_zor()
 		sudo apt install resolvconf
 
 		# Changing the computer name
-		#Assign existing hostname to hostn
-		hostn=(cat /etc/hostname)
-
-		#Display existing hostname
-		echo "Existing hostname is hostn"
-
-		#Ask for new hostname newhost
-		echo "Enter new hostname: "
-		read newhost
-
-		#change hostname in /etc/hosts & /etc/hostname
-		sudo sed -i "s/hostn/$newhost/g" /etc/hosts
-		sudo sed -i "s/hostn/$newhost/g" /etc/hostname
-
-		#display new hostname
-		echo "Your new hostname is $newhost"
+		change_deb_hostname
 		# 192.168.1.253 is my AD IP, please replace it with your own information IP Address
 		echo "Now Changing your DNS to 192.168.1.253, AD IP address"
 		# add DNS name server to my AD
