@@ -13,6 +13,28 @@
 # It will hide all the User Accounts in Login Screen because it is a shared computer for security reasons
 # This script will run for Debian/Ubuntu and Redhat/Fedora
 # Please run as root/suo user
+	# Hide all usernames from the Logon page on gnome:
+	sudo xhost SI:localuser:gdm
+	sudo -u gdm gsettings set org.gnome.login-screen disable-user-list true
+        echo "================================================================"
+        echo "#                                                               #"
+        echo "#   CID (Closed In Directory) written by  Eduardo Moraes        #"
+        echo "#   His email emoraes25@outlook.com                             #"
+        echo "#   Please donate to support his work and effort                #"
+        echo "#   This script is written by Patrick Nsongila                  #"
+        echo "#   www.concepta-biz.net & +353 872821070                       #"
+        echo "#   This script allows you:                                     #"
+        echo "#     1. Change the computer name                               #"
+        echo "#     2. Add your DNS IP                                        #"
+        echo "#     3. Install CID on your Debian or Fedora Based Linux       #"  
+        echo "#     4. Run CID in a user-friendly manner                      #" 
+        echo "#                                                               #"      
+        echo "================================================================"
+	echo
+# Getting the DNS IP Address.
+echo "Enter your DNS IP address in the format XXX.XXX.XXX.XXX : "
+read mydns
+echo "Your DNS is: " $mydns
 
 function change_deb_hostname()
 	{
@@ -43,21 +65,16 @@ function debianbase()
 	sudo apt install resolvconf
 	# Changing the computer name
 		change_deb_hostname
-		# 192.168.1.253 is my AD IP, please replace it with your own information IP Address
-		echo "Now Changing your DNS to 192.168.1.253, AD IP address"
-		# add DNS name server to my AD
-		# 192.168.1.253 is my AD IP, please replace it with your own information
-		echo "nameserver 192.168.1.253" >> /etc/resolvconf/resolv.conf.d/head
+		# Adding DNS server IP to your computer as name server
+		echo "Now Changing your DNS to :" $mydns
+		echo "nameserver "$mydns >> /etc/resolvconf/resolv.conf.d/head
 		# Restart the resolvconf service.
-
 		sudo service resolvconf restart
-	sudo apt install acl attr cifs-utils cups-client cups-daemon iproute2 iputils-ping keyutils krb5-user libnss-winbind libpam-mount libpam-winbind passwd policykit-1 samba samba-common-bin samba-dsdb-modules samba-vfs-modules smbclient sudo systemd x11-xserver-utils zenity
-	 ver=1.1.6
-	 wget http://downloads.sf.net/c-i-d/cid-{ver}.tar.gz    
-	 tar -xzf cid-{ver}.tar.gz
-	 cd cid-{ver}
-	 sudo ./INSTALL.sh
-	 sudo cid-gtk 
+		sudo apt install acl attr cifs-utils cups-client cups-daemon iproute2 iputils-ping keyutils krb5-user libnss-winbind libpam-mount libpam-winbind passwd policykit-1 samba samba-common-bin samba-dsdb-modules samba-vfs-modules smbclient sudo systemd x11-xserver-utils zenity
+	  	wget -O - https://downloads.sf.net/c-i-d/docs/CID-GPG-KEY | sudo apt-key add -
+ 		echo 'deb https://downloads.sf.net/c-i-d/pkgs/apt/debian sid main' | sudo tee /etc/apt/sources.list.d/cid.list
+ 		sudo apt update
+ 		sudo apt install cid cid-gtk 
 
 	}
 function ubuntu_mint_zor()
@@ -74,11 +91,11 @@ function ubuntu_mint_zor()
 
 		# Changing the computer name
 		change_deb_hostname
-		# 192.168.1.253 is my AD IP, please replace it with your own information IP Address
-		echo "Now Changing your DNS to 192.168.1.253, AD IP address"
+		# Adding DNS server IP to your computer as name server IP Address
+		echo "Now Changing your DNS to :" $mydns
 		# add DNS name server to my AD
-		# 192.168.1.253 is my AD IP, please replace it with your own information
-		echo "nameserver 192.168.1.253" >> /etc/resolvconf/resolv.conf.d/head
+		# Adding DNS server IP to your computer as name server
+		echo "nameserver "$mydns >> /etc/resolvconf/resolv.conf.d/head
 		# Restart the resolvconf service.
 
 		sudo service resolvconf restart
@@ -101,11 +118,8 @@ function fedora_rhel()
 		sudo dnf update
 		# Trying upgrading
 		sudo dnf upgrade --refresh
-		#Allows you to ssh in to support the system.... as root
-
-		# add DNS name server to my AD
-		# 192.168.1.253 is my AD IP, please replace it with your own information
-		echo "DNS=192.168.1.253" >> /etc/systemd/resolved.conf
+		# Adding DNS server IP to your computer as name server
+		echo "DNS="$mydns >> /etc/systemd/resolved.conf
 		# Restart the resolvconf service.
 		sudo systemctl restart systemd-resolved.service
 		#changing the hostname 
@@ -127,16 +141,9 @@ function fedora_rhel()
 		# CID (Closed In Directory)  installation
 		# This scrip will help you install CID (Closed In Directory)
 		#CID (Closed In Directory) is a set of bash scripts for inserting and managing Linux computers in "Active Directory" domains. Modifications made to the system allow Linux to behave like a 		Windows computer within AD.
-		ver=1.1.6
-		wget http://downloads.sf.net/c-i-d/cid-{ver}.tar.gz    
-		tar -xzf cid-{ver}.tar.gz
-		cd cid-{ver}
-		sudo ./INSTALL.sh
-		clear 
-		echo "Samba4/AD Joiner installation completed"
-		# Now running CID (Closed In Directory) to allow you to join AD/Samba4
-		echo "Please reboot the computer and run sudo cid-gtk to join the DOMAIN"
-		# sudo cid-gtk 
+		sudo rpm --import https://downloads.sf.net/c-i-d/docs/CID-GPG-KEY
+ 		sudo dnf config-manager --add-repo https://downloads.sf.net/c-i-d/pkgs/rpm/fedora/cid.repo
+ 		sudo dnf install cid
 	}
 
 function otherdistros()
@@ -152,24 +159,8 @@ function otherdistros()
           sudo ./INSTALL.sh
           sudo cid-gtk 
 	}
-# Hide all usernames from the Logon page on gnome:
-	xhost SI:localuser:gdm
-	sudo -u gdm gsettings set org.gnome.login-screen disable-user-list true
-        echo "================================================================"
-        echo "#                                                               #"
-        echo "#   CID (Closed In Directory) written by  Eduardo Moraes        #"
-        echo "#   His email emoraes25@outlook.com                             #"
-        echo "#   Please donate to support his work and effort                #"
-        echo "#   This script is written by Patrick Nsongila                  #"
-        echo "#   www.concepta-biz.net & +353 872821070                       #"
-        echo "#   This script allows you:                                     #"
-        echo "#     1. Change the computer name                               #"
-        echo "#     2. Add your DNS IP                                        #"
-        echo "#     3. Install CID on your Debian or Fedora Based Linux       #"  
-        echo "#     4. Run CID in a user-friendly manner                      #" 
-        echo "#                                                               #"      
-        echo "================================================================"
-	echo
+# Choosing your type of distribution below:
+
 	echo "1. Ubuntu Based Distribution"
 	echo "2. Fedora Based Distribution"
 	echo "3. Debian Based Distribution"
