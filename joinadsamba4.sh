@@ -70,7 +70,8 @@ function debianbase()
 		echo "nameserver "$mydns >> /etc/resolvconf/resolv.conf.d/head
 		# Restart the resolvconf service.
 		sudo service resolvconf restart
-		sudo apt install acl attr cifs-utils cups-client cups-daemon iproute2 iputils-ping keyutils krb5-user libnss-winbind libpam-mount libpam-winbind passwd policykit-1 samba samba-common-bin samba-dsdb-modules samba-vfs-modules smbclient sudo systemd x11-xserver-utils zenity
+		sudo apt install acl attr cifs-utils cups-client cups-daemon iproute2 iputils-ping keyutils krb5-user libnss-winbind libpam-mount libpam-winbind passwd policykit-1 samba samba-common-bin samba-dsdb-modules samba-vfs-modules smbclient 
+		sudo systemd x11-xserver-utils zenity
 	  	wget -O - https://downloads.sf.net/c-i-d/docs/CID-GPG-KEY | sudo apt-key add -
  		echo 'deb https://downloads.sf.net/c-i-d/pkgs/apt/debian sid main' | sudo tee /etc/apt/sources.list.d/cid.list
  		sudo apt update
@@ -85,7 +86,8 @@ function ubuntu_mint_zor()
 		# Trying upgrading
 		sudo apt upgrade
 		#Allows you to ssh in to support the system.... as root
-
+		sudo apt install openssh-server
+		sudo systemctl status ssh
 		#Install the resolvconf package for DNS change
 		sudo apt install resolvconf
 
@@ -115,13 +117,13 @@ function ubuntu_mint_zor()
 function fedora_rhel()
 	{
 		# Updating OS first
-		sudo dnf update
+		dnf update
 		# Trying upgrading
-		sudo dnf upgrade --refresh
+		dnf upgrade --refresh
 		# Adding DNS server IP to your computer as name server
 		echo "DNS="$mydns >> /etc/systemd/resolved.conf
 		# Restart the resolvconf service.
-		sudo systemctl restart systemd-resolved.service
+		systemctl restart systemd-resolved.service
 		#changing the hostname 
 		hostn=(cat /etc/hostname)
 		#Display existing hostname
@@ -136,28 +138,28 @@ function fedora_rhel()
 		# CID (Closed In Directory)  Requirements below: 
 		# installing the requirements for joining the Domain
 
-		dnf install acl attr cifs-utils cups cups-client gvfs-smb iproute iputils keyutils krb5-workstation pam_mount samba samba-client samba-winbind samba-winbind-clients shadow-utils sudo systemd xhost zenity
+		dnf -y install realmd adcli sssd oddjob oddjob-mkhomedir samba-common-tools krb5-workstation authselect-compat openldap-clients policycoreutils-python samba-common samba-common-tools cifs-utils 
+		systemd xhost zenity
 
 		# CID (Closed In Directory)  installation
 		# This scrip will help you install CID (Closed In Directory)
 		#CID (Closed In Directory) is a set of bash scripts for inserting and managing Linux computers in "Active Directory" domains. Modifications made to the system allow Linux to behave like a 		Windows computer within AD.
-		sudo rpm --import https://downloads.sf.net/c-i-d/docs/CID-GPG-KEY
- 		sudo dnf config-manager --add-repo https://downloads.sf.net/c-i-d/pkgs/rpm/fedora/cid.repo
- 		sudo dnf install cid
+		rpm --import https://downloads.sf.net/c-i-d/docs/CID-GPG-KEY
+		dnf config-manager --add-repo https://downloads.sf.net/c-i-d/pkgs/rpm/fedora/cid.repo
+		dnf install cid
 	}
 
 function otherdistros()
 	{
-	  echo -n "Installing only CID, please make sure you added already your DNS IP and you named your computer based on your organisation Naming convetion"
+	  echo -n "Installing only CID, please make sure you added already your DNS IP and you named your computer based on your organisation Naming convention"
     	  echo
           echo "Now installing CID for you."
-          
-          ver=1.1.6
- 	  wget http://downloads.sf.net/c-i-d/cid-{ver}.tar.gz    
-	  tar -xzf cid-{ver}.tar.gz
-	  cd cid-{ver}
-          sudo ./INSTALL.sh
-          sudo cid-gtk 
+          ver=1.1.7 #current version
+	  wget https://downloads.sf.net/c-i-d/cid-${ver}.tar.gz    
+	  tar -xzf cid-${ver}.tar.gz
+	  cd cid-${ver}
+          ./INSTALL.sh
+          cid-gtk 
 	}
 # Choosing your type of distribution below:
 
